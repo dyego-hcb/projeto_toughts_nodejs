@@ -14,6 +14,10 @@ const Tought = require('./models/Tought');
 app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
 
+const toughtsRoutes = require('./routes/toughtsRoutes');
+
+const ToughtController = require('./controllers/ToughtController');
+
 app.use(express.static('public'));
 
 app.use(express.urlencoded({extended: true}));
@@ -47,5 +51,8 @@ app.use((req, res, next) => {
 
     next();
 });
+
+app.use('/toughts', toughtsRoutes);
+app.use('/', ToughtController.showToughts);
 
 conn.sync().then(() => { app.listen(3000);}).catch((err) => { console.log(err);});
