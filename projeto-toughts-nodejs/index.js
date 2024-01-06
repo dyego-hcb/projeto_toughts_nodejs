@@ -15,6 +15,7 @@ app.engine('handlebars', exphbs.engine());
 app.set('view engine', 'handlebars');
 
 const toughtsRoutes = require('./routes/toughtsRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const ToughtController = require('./controllers/ToughtController');
 
@@ -53,6 +54,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/toughts', toughtsRoutes);
+app.use('/', authRoutes);
 app.use('/', ToughtController.showToughts);
 
 conn.sync().then(() => { app.listen(3000);}).catch((err) => { console.log(err);});
