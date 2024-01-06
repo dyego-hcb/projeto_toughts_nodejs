@@ -97,7 +97,7 @@
   border: 1px solid #2dacf6;
 }
 
-form input[type='submit'],
+form input[type="submit"],
 .btn {
   background-color: transparent;
   color: #2dacf6;
@@ -112,7 +112,7 @@ form input[type='submit'],
   transition: 0.5s;
 }
 
-form input[type='submit']:hover,
+form input[type="submit"]:hover,
 .btn:hover {
   background-color: #2dacf6;
   color: #fff;
@@ -144,6 +144,10 @@ form input[type='submit']:hover,
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.dashboard a {
+  color: #2dacf6;
 }
 
 .dashboard .label {
@@ -214,7 +218,7 @@ form input[type='submit']:hover,
   margin-right: 1em;
 }
 
-.home-header input[type='text'] {
+.home-header input[type="text"] {
   width: 60%;
 }
 
