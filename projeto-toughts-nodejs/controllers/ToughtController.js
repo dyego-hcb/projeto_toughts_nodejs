@@ -10,23 +10,25 @@ module.exports = class ToughtController {
   static async showDashboard(req, res) {
     const userId = req.session.userid;
 
-    const user = await User.findOne({where: {id: userId}, include: Tought, plain: true});
+    const user = await User.findOne({
+      where: { id: userId },
+      include: Tought,
+      plain: true,
+    });
 
-    if(!user)
-    {
-      res.redirect('/login');
+    if (!user) {
+      res.redirect("/login");
     }
 
     const toughts = user.Toughts.map((result) => result.dataValues);
 
     let emptyToughts = false;
 
-    if(toughts.length === 0)
-    {
+    if (toughts.length === 0) {
       emptyToughts = true;
     }
 
-    res.render("toughts/dashboard", {toughts, emptyToughts});
+    res.render("toughts/dashboard", { toughts, emptyToughts });
   }
 
   static showCreateTought(req, res) {
@@ -39,11 +41,10 @@ module.exports = class ToughtController {
       UserId: req.session.userid,
     };
 
-    const user = await User.findOne({where: {id: tought.UserId}});
+    const user = await User.findOne({ where: { id: tought.UserId } });
 
-    if(!user)
-    {
-      res.redirect('/login');
+    if (!user) {
+      res.redirect("/login");
     }
 
     try {
@@ -58,29 +59,40 @@ module.exports = class ToughtController {
     }
   }
 
-  static async showDashboardRemoveToughtPost(req, res)
-  {
+  static async showDashboardRemoveToughtPost(req, res) {
     const UserId = req.session.userid;
-    const toughtId = req.body.id;
+    const id = req.body.id;
 
-    const user = await User.findOne({where: {id: UserId}});
+    const user = await User.findOne({ where: { id: UserId } });
 
-    if(!user)
-    {
-      res.redirect('/login');
+    if (!user) {
+      res.redirect("/login");
     }
 
-    try
-    {
-      await Tought.destroy({where: {id: toughtId, UserId: UserId}});
+    try {
+      await Tought.destroy({ where: { id: id, UserId: UserId } });
 
       req.flash("message", "Pensamento removido com sucesso!!");
       req.session.save(() => {
         res.redirect("/toughts/dashboard");
       });
-    }catch(err)
-    {
+    } catch (err) {
       console.log(err);
     }
+  }
+
+  static async showUpdateTought(req, res) {
+    const id = req.params.id;
+    const UserId = req.session.userid;
+
+    const user = await User.findOne({ where: { id: UserId } });
+
+    if (!user) {
+      res.redirect("/login");
+    }
+
+    const tought = await Tought.findOne({ where: { id: id, UserId: user.id }, raw: true });
+
+    res.render("toughts/edit", { tought });
   }
 };
