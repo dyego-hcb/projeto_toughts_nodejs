@@ -39,15 +39,40 @@ module.exports = class ToughtController {
       res.redirect('/login');
     }
 
-    await Tought.create(tought);
-
-    req.flash("message", "Pensamento criado com sucesso!!");
-
     try {
+      await Tought.create(tought);
+
+      req.flash("message", "Pensamento criado com sucesso!!");
       req.session.save(() => {
         res.redirect("/toughts/dashboard");
       });
     } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async showDashboardRemoveToughtPost(req, res)
+  {
+    const UserId = req.session.userid;
+    const toughtId = req.body.id;
+
+    const user = await User.findOne({where: {id: UserId}});
+
+    if(!user)
+    {
+      res.redirect('/login');
+    }
+
+    try
+    {
+      await Tought.destroy({where: {id: toughtId, UserId: UserId}});
+
+      req.flash("message", "Pensamento removido com sucesso!!");
+      req.session.save(() => {
+        res.redirect("/toughts/dashboard");
+      });
+    }catch(err)
+    {
       console.log(err);
     }
   }
