@@ -250,7 +250,8 @@ form input[type="submit"]:hover,
 }
 
 .order-container button:hover,
-.order-container a:hover {
+.order-container a:hover,
+.order-container i:hover {
   color: #2dacf6;
 }
 
@@ -258,10 +259,6 @@ form input[type="submit"]:hover,
 .order-container button,
 .order-container a {
   margin: 0 10px;
-}
-
-.order-container i {
-  color: #2dacf6;
 }
 
 .toughts-container figure {
