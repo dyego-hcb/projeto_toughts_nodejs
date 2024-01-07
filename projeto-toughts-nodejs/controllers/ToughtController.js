@@ -1,10 +1,13 @@
-const session = require("express-session");
 const Tought = require("../models/Tought");
 const User = require("../models/User");
 
 module.exports = class ToughtController {
   static async showToughts(req, res) {
-    res.render("toughts/home");
+    const toughtsData = await Tought.findAll({include: User,})
+
+    const toughts = toughtsData.map((result) => result.get({ plain: true }));
+
+    res.render("toughts/home", { toughts });
   }
 
   static async showDashboard(req, res) {
@@ -91,14 +94,16 @@ module.exports = class ToughtController {
       res.redirect("/login");
     }
 
-    const tought = await Tought.findOne({ where: { id: id, UserId: user.id }, raw: true });
+    const tought = await Tought.findOne({
+      where: { id: id, UserId: user.id },
+      raw: true,
+    });
 
     res.render("toughts/edit", { tought });
   }
 
-  static async showUpdateToughtPost(req, res)
-  {
-    const {id, title} = req.body;
+  static async showUpdateToughtPost(req, res) {
+    const { id, title } = req.body;
     const UserId = req.session.userid;
 
     const user = await User.findOne({ where: { id: UserId } });
@@ -107,10 +112,10 @@ module.exports = class ToughtController {
       res.redirect("/login");
     }
 
-    const tought = { title: title}
+    const tought = { title: title };
 
     try {
-      await Tought.update(tought, {where: {id: id, UserId: UserId}});
+      await Tought.update(tought, { where: { id: id, UserId: UserId } });
 
       req.flash("message", "Pensamento atualizado com sucesso!!");
       req.session.save(() => {
